@@ -13,12 +13,24 @@ class PaperboyModel():
         con, cur = dbpool.get_connection()
         result = None
         try:
-            sql = "insert into story (source_id, source_name, source_url, path, times_updated, s_id, s_date, s_title, s_summary, s_author, s_link, s_tags, s_media_content, created, updated) " \
+            insert_sql = "insert into story (source_id, source_name, source_url, path, times_updated, s_id, s_date, s_title, s_summary, s_author, s_link, s_tags, s_media_content, created, updated) " \
                 "values (%(_source_id)s, %(_source_name)s, %(_source_url)s, %(_path)s, 0, %(_id)s, %(_published_parsed)s, %(title)s, %(_summary)s, %(_author)s, %(link)s, %(_tags)s, %(_media_content)s, now(), now()) " \
                 "returning id"
-            cur.execute(sql, story)
+            check_sql = "select count(*) num_stories from story where s_id=%(_id)s or (s_title=%(title)s and s_title<>'')"
+
+            cur.execute(check_sql, story)
             if cur.rowcount > 0:
-                result = cur.fetchone()['id']
+                match = True if cur.fetchone()['num_stories'] > 0 else False
+                if not match:
+                    cur.execute(insert_sql, story)
+                    if cur.rowcount > 0:
+                        result = cur.fetchone()['id']
+                else:
+                    pass
+                    #print 'id:%s, title:%s, source:%s'%(story['_id'], story['title'], story['_source_name'])
+            else:
+                pass # bummer
+
         except Exception, e:
             logging.error('add_story: ' + e.message)
             pass

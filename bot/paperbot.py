@@ -15,6 +15,7 @@ class PaperBot():
         # TODO need to add topic identification
 
     def curate(self):
+        story_count = 0
         for source in self._sources:
             feed = feedparser.parse(source['url'])
             if 'entries' in feed:
@@ -53,7 +54,8 @@ class PaperBot():
                         story['_id'] = entry['link']
                     story.update(entry)
                     pdb.add_story(story)
-
+                    story_count += 1
+        print 'story_count: %d'%story_count
     def assign_topic(self):
         pass
 
