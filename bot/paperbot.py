@@ -3,6 +3,7 @@ from datetime import datetime
 from time import mktime
 import random
 import feedparser
+from BeautifulSoup import BeautifulSoup
 from bot import pdb
 
 
@@ -47,7 +48,7 @@ class PaperBot():
                     else:
                         story['_author'] = ''
                     if 'summary' in entry:
-                        story['_summary'] = entry['summary']
+                        story['_summary'] = self.remove_markup(entry['summary'])
                     else:
                         story['_summary'] = ''
                     if 'id' in entry:
@@ -57,7 +58,10 @@ class PaperBot():
                     story.update(entry)
                     pdb.add_story(story)
                     story_count += 1
-        print 'story_count: %d'%story_count
+                    if not story_count % 50:
+                        print 'story_count: %d' % story_count
+        print 'story_count: %d' % story_count
+
     def assign_topic(self):
         pass
 
@@ -68,6 +72,10 @@ class PaperBot():
         for i in range(size):
             uid = uid + uidPot[random.randint(0, l)]
         return '/story/' + uid
+
+    def remove_markup(self, s):
+        r = ''.join(BeautifulSoup(s, convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))
+        return r
 
 
 if __name__ == '__main__':
