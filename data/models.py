@@ -13,7 +13,9 @@ class PaperboyModel():
         con, cur = dbpool.get_connection()
         result = None
         try:
-            sql = ""
+            sql = "insert into story (source_id, source_name, source_url, path, times_updated, s_id, s_date, s_title, s_summary, s_author, s_link, s_tags, s_media_content, created, updated) " \
+                "values (%(_source_id)s, %(_source_name)s, %(_source_url)s, %(_path)s, 0, %(_id)s, %(_published_parsed)s, %(title)s, %(_summary)s, %(_author)s, %(link)s, %(_tags)s, %(_media_content)s, now(), now()) " \
+                "returning id"
             cur.execute(sql, story)
             if cur.rowcount > 0:
                 result = cur.fetchone()['id']
@@ -37,6 +39,21 @@ class PaperboyModel():
             result = cur.fetchall()
         except Exception, e:
             logging.error('get_stories: ' + e.message)
+        finally:
+            con.commit()
+            dbpool.put_connection(con)
+        return result
+
+    def get_active_sources(self):
+        con, cur = dbpool.get_connection()
+        result = None
+        try:
+
+            sql = "select id, name, url, type from source where active=true order by id"
+            cur.execute(sql, {})
+            result = cur.fetchall()
+        except Exception, e:
+            logging.error('get_active_sources: ' + e.message)
         finally:
             con.commit()
             dbpool.put_connection(con)
