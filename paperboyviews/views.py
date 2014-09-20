@@ -13,7 +13,7 @@ def _regular_jsonify(o):
     return app.response_class(content, mimetype='application/json')
 
 
-@app.route('/stories/', methods=['GET'])
+@app.route('/stories/', methods=['GET', 'POST'])
 def latest_json():
     result = []
     callback = request.args.get('callback', None)
@@ -26,5 +26,5 @@ def latest_json():
     if callback is None:
         result = _regular_jsonify(result)
     else:
-        result = _padded_jsonify(callback, result)
+        result = _padded_jsonify(callback, {'stories': result})
     return result
