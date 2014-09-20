@@ -3,11 +3,13 @@ insert into source (active, name, url, type, created, updated) values
 insert into source (active, name, url, type, created, updated) values
 (true,'WMC','http://www.wmctv.com/category/4728/news?clienttype=rss','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
-(true,'Commercial Appeal News','http://www.commercialappeal.com/rss/headlines/news/','rss', now(), now());
+(true,'Commercial Appeal News','http://scrippsobfeeds.endplay.com/content-syndication-portlet/feedServlet?obfType=RSS_FEED&siteId=100107&categoryId=10001','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
-(true,'Commercial Appeal Business','http://www.commercialappeal.com/rss/headlines/business/','rss', now(), now());
+(true,'Commercial Appeal Local News','http://scrippsobfeeds.endplay.com/content-syndication-portlet/feedServlet?obfType=RSS_FEED&siteId=100107&categoryId=20000','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
-(true,'Commercial Appeal Sports','http://www.commercialappeal.com/rss/headlines/sports/','rss', now(), now());
+(true,'Commercial Appeal Business','http://scrippsobfeeds.endplay.com/content-syndication-portlet/feedServlet?obfType=RSS_FEED&siteId=100107&categoryId=10007','rss', now(), now());
+insert into source (active, name, url, type, created, updated) values
+(true,'Commercial Appeal Sports','http://scrippsobfeeds.endplay.com/content-syndication-portlet/feedServlet?obfType=RSS_FEED&siteId=100107&categoryId=10004','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
 (true,'Grizzlies.com','http://feeds.feedburner.com/grizzlies','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
@@ -20,8 +22,6 @@ insert into source (active, name, url, type, created, updated) values
 (true,'Memphis Business Journal','http://feeds.bizjournals.com/bizj_memphis?format=xml','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
 (true,'The Tennessean','http://www.tennessean.com/apps/pbcs.dll/section?prof=2275&Category=profilerss&mime=xml&nocache=1&rsstitle=TOP%20NEWS','rss', now(), now());
-insert into source (active, name, url, type, created, updated) values
-(true,'KTHV Little Rock','http://feeds.feedburner.com/Kthv-ThvHeadlines?format=xml','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values
 (true,'Germantown News','http://www.germantownnews.com/?rss=community_news','rss', now(), now());
 insert into source (active, name, url, type, created, updated) values

@@ -38,6 +38,12 @@ class PaperBot():
                         for media_content in entry['media_content']:
                             media_content_url = media_content['url']
                             break
+                    if media_content_url == '':
+                        if 'links' in entry:
+                            for link in entry['links']:
+                                if 'type' in link and 'href' in link and 'image' in link['type']:
+                                    media_content_url = link['href']
+                                    break
                     story['_media_content'] = media_content_url
                     if 'published_parsed' in entry:
                         story['_published_parsed'] = datetime.fromtimestamp(mktime(entry['published_parsed']))
