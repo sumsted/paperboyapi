@@ -30,6 +30,7 @@ class PaperboyModel():
                     #print 'id:%s, title:%s, source:%s'%(story['_id'], story['title'], story['_source_name'])
             else:
                 pass # bummer
+                #print 'id:%s, title:%s, source:%s'%(story['_id'], story['title'], story['_source_name'])
 
         except Exception, e:
             logging.error('add_story: ' + e.message)

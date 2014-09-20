@@ -11,7 +11,9 @@ class PaperBot():
         self._sources = pdb.get_active_sources()
 
     def start(self):
+        print 'Start feed curator'
         self.curate()
+        print 'Stop feed curator'
         # TODO need to add topic identification
 
     def curate(self):
