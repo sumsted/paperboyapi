@@ -59,7 +59,7 @@ def topics():
     return result
 
 @app.route('/story/<path>', methods=['GET'])
-def tick(key):
+def tick(path):
     url = pdb.get_story_by_path(path)
     if url is not None:
         return redirect(url)
