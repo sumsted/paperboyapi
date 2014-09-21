@@ -1,5 +1,5 @@
 __author__ = 'scottumsted'
-from flask import render_template, make_response, request, json
+from flask import render_template, make_response, request, json, redirect
 from paperboyviews import app, pdb
 import logging
 
@@ -59,9 +59,9 @@ def topics():
     return result
 
 @app.route('/story/<path>', methods=['GET'])
-def tick(path):
-    url = pdb.get_story_by_path(path)
-    if url is not None:
-        return redirect(url)
+def redirect_to_source(path):
+    story = pdb.get_story_by_path(path)
+    if story is not None and 's_link' in story:
+        return redirect(story['s_link'])
     else:
         return 'Not Found', 404

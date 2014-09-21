@@ -76,7 +76,7 @@ class PaperboyModel():
         con, cur = dbpool.get_connection()
         result = None
         try:
-            sql = "select id, source_name source, s_date date, s_title title, s_summary summary, s_author author, " \
+            sql = "select id, source_name source, s_link, s_date date, s_title title, s_summary summary, s_author author, " \
                   "'/story/'||path link, s_media_content media_content " \
                   "from story where path = %(path)s"
             cur.execute(sql, {'path':path})
