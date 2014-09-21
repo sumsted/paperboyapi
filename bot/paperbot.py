@@ -1,8 +1,11 @@
+import string
+
 __author__ = 'scottumsted'
 from datetime import datetime
 from time import mktime
 import random
 import feedparser
+from fuzzywuzzy import fuzz
 from BeautifulSoup import BeautifulSoup
 from bot import pdb
 
@@ -18,6 +21,7 @@ class PaperBot():
         # TODO need to add topic identification
 
     def curate(self):
+        punc = set(string.punctuation)
         story_count = 0
         for source in self._sources:
             feed = feedparser.parse(source['url'])
@@ -55,14 +59,31 @@ class PaperBot():
                         story['_author'] = ''
                     if 'summary' in entry:
                         story['_summary'] = self.remove_markup(entry['summary'])
+                        story['_fuzzy_summary'] = ''.join(sorted(
+                            ['%s ' % w.upper() for w in ''.join([c for c in story['_summary'] if c not in punc]).split()
+                             if len(w) > 3 and w.isalpha()]))
                     else:
                         story['_summary'] = ''
+                        story['_fuzzy_summary'] = ''
                     if 'id' in entry:
                         story['_id'] = entry['id']
                     else:
                         story['_id'] = entry['link']
                     story.update(entry)
-                    pdb.add_story(story)
+                    id = pdb.add_story(story)
+                    if id is not None:
+                        fuzzy_summaries = pdb.get_fuzzy_summaries(id)
+                        for summary in fuzzy_summaries:
+                            score = fuzz.partial_token_set_ratio(summary['fuzzy_summary'], story['_fuzzy_summary'])
+                            if score >= 50:
+                                topic_id = pdb.get_topic_story(summary['id'])
+                                if topic_id is not None:
+                                    pdb.add_topic_story(topic_id, id, score)
+                                else:
+                                    topic_id = pdb.add_topic(summary['s_title'])
+                                    pdb.add_topic_story(topic_id, summary['id'], score)
+                                    pdb.add_topic_story(topic_id, id, score)
+                                break
                     story_count += 1
                     if not story_count % 50:
                         print 'story_count: %d' % story_count
@@ -77,7 +98,7 @@ class PaperBot():
         l = len(uidPot) - 1
         for i in range(size):
             uid = uid + uidPot[random.randint(0, l)]
-        return '/story/' + uid
+        return uid
 
     def remove_markup(self, s):
         r = ''.join(BeautifulSoup(s, convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))

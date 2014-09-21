@@ -22,6 +22,7 @@ updated timestamp,
 times_updated int,
 source_url text,
 source_name text,
+fuzzy_summary text,
 s_id text,
 s_date timestamp,
 s_title text,
@@ -47,6 +48,7 @@ create table topic_story
 id serial primary key not null,
 topic_id int,
 story_id int,
+score int,
 created timestamp
 );
 

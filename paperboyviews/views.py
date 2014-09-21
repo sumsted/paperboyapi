@@ -34,14 +34,22 @@ def stories():
 @app.route('/topics/', methods=['GET', 'POST'])
 def topics():
     result = []
+
     callback = request.args.get('callback', None)
     try:
-        stories = pdb.get_stories()
-        if stories is not None:
-            result = []
-            for s in stories:
-                s['related_stories'] = [{'source': 'WREG', 'link': '/story/ASDF'}, {'source': 'WMC', 'link': '/story/ASDF'}]
-                result.append(s)
+        topics = pdb.get_topics()
+        related_stories = []
+        for topic in topics:
+            topic_result = {'related_stories': []}
+            topic_stories = pdb.get_topic_story_by_topic(topic['id'])
+            i = 0
+            for i, topic_story in enumerate(topic_stories):
+                story = pdb.get_story(topic_story['story_id'])
+                if not i:
+                    topic_result.update(story)
+                else:
+                    topic_result['related_stories'].append({'source': story['source'], 'link': story['link']})
+            result.append(topic_result)
     except Exception, e:
         result = []
     if callback is None:
@@ -49,3 +57,11 @@ def topics():
     else:
         result = _padded_jsonify(callback, {'topics': result})
     return result
+
+@app.route('/story/<path>', methods=['GET'])
+def tick(key):
+    url = pdb.get_story_by_path(path)
+    if url is not None:
+        return redirect(url)
+    else:
+        return 'Not Found', 404
